@@ -14,15 +14,17 @@
     <th>Image</th>
     <th>Video</th>
     <th>Description</th>
-   
+
     </tr>
 
   @foreach($data as $data)
 <tr>
 <td>{{$data->id}}</td>
 <td>{{$data->name}}</td>
-<td>{{$data->image}}</td>
-<td>{{$data->video}}</td>
+<td><img src="{{$data->image}}" alt=""></td>
+<td><video>
+    <source src="{{$data->video}}" >
+</video></td>
 <td>{{$data->description}}</td>
 
 </tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Data;
 use Illuminate\Http\Request;
+use Hash;
 
 class DataController extends Controller
 {
@@ -35,10 +36,10 @@ class DataController extends Controller
         $request->file('video')->storeAs('public/photos',$video);
 
         $data = new Data;
-        $data->name = $request->name;
-        $data->video = $video;
-        $data->image = $image;
-        $data->description = $request->description;
+        $data->name = Hash::make($request->name);
+        $data->video = Hash::make($video) ;
+        $data->image =Hash::make($image);
+        $data->description =  Hash::make($request->description);
         $data->save();
         return redirect('/');
 
