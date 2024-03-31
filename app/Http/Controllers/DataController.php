@@ -27,28 +27,43 @@ class DataController extends Controller
     }
     public function create(Request $request)
     {
-        //
-        // $image = $request->file('image')->getClientOriginalName();
-        // $request->file('image')->storeAs('public/photos',$image);
-        $data = Data::all();
-
         $image = $request->file('image')->getClientOriginalName();
-        $request->file('image')->storeAs('public/photos',$image);
+        $request->file('image')->storeAs('public/photos', $image);
         $video = $request->file('video')->getClientOriginalName();
-        $request->file('video')->storeAs('public/photos',$video);
+        $request->file('video')->storeAs('public/photos', $video);
 
         $data = new Data;
         $data->name = $request->name;
-        $data->video = $video ;
-        $data->image =$image;
-        $data->description =  $request->description;
+        $data->video = $video;
+        $data->image = $image;
+        $data->description = $request->description;
         $data->save();
-        DB::table('media')->insert([
-            'data_id'=> Hash::make($data->id),
-        ]);
-        return redirect('/');
 
+        // Tạo chuỗi hash từ idProduct và prev_idProductHash
+        $combinedHash = $data->idProduct . $data->prev_idProductHash;
+
+        // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHash không
+        $existingMedia = Media::where('hash_idProduct', $combinedHash)->first();
+
+        if (!$existingMedia) {
+            // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
+            $media = new Media;
+            $media->hash_idProduct = $data->idProduct;
+            $media->prev_idProductHash = "";
+        } else {
+            // Nếu có bản ghi trong media, kiểm tra xem hash-idProduct có khớp với combinedHash không
+            // Nếu khớp, thêm idProduct mới vào prev-idProductHash và cập nhật hash-idProduct
+            $media = new Media;
+            $media->hash_idProduct = $data->idProduct . $existingMedia->prev_idProductHash;
+            $media->prev_idProductHash = $existingMedia->hash_idProduct;
+
+        }
+
+        $media->save();
+
+        return redirect('/');
     }
+
     /**
      * Store a newly created resource in storage.
      */
