@@ -27,6 +27,7 @@ class DataController extends Controller
     }
     public function create(Request $request)
     {
+        $data = Data::all();
         $image = $request->file('image')->getClientOriginalName();
         $request->file('image')->storeAs('public/photos', $image);
         $video = $request->file('video')->getClientOriginalName();
