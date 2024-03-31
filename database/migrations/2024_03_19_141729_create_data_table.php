@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('data', function (Blueprint $table) {
             $table->id();
             $table->string('idProduct')->unique()->default(Str::uuid());
+            $table->string("prev_idProductHash")->default("");
+            $table->number("nonce");
             $table->string('name');
             $table->string('video');
             $table->string('image');

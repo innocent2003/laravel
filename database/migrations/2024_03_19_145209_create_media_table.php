@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('media', function (Blueprint $table) {
             $table->id();
             $table->string("hash_idProduct");
-            $table->string("prev_idProductHash");
+            $table->string("prev_idProductHash")->default("");
+            $table->number("nonce");
             $table->timestamps();
         });
     }
