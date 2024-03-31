@@ -40,21 +40,21 @@ class DataController extends Controller
         $data->description = $request->description;
         $data->save();
 
+        $media = new Media;
+
         // Tạo chuỗi hash từ idProduct và prev_idProductHash
-        $combinedHash = $data->idProduct . $data->prev_idProductHash;
+        $combinedHash = $data->idProduct . $media->prev_idProductHash;
 
         // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHash không
         $existingMedia = Media::where('hash_idProduct', $combinedHash)->first();
 
         if (!$existingMedia) {
             // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
-            $media = new Media;
             $media->hash_idProduct = $data->idProduct;
             $media->prev_idProductHash = "";
         } else {
             // Nếu có bản ghi trong media, kiểm tra xem hash-idProduct có khớp với combinedHash không
             // Nếu khớp, thêm idProduct mới vào prev-idProductHash và cập nhật hash-idProduct
-            $media = new Media;
             $media->hash_idProduct = $data->idProduct . $existingMedia->prev_idProductHash;
             $media->prev_idProductHash = $existingMedia->hash_idProduct;
 
