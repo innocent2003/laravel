@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("hash_idProduct");
             $table->string("prev_idProductHash")->default("");
-            $table->number("nonce");
+            $table->unsignedBigInteger("nonce");
             $table->timestamps();
         });
     }
