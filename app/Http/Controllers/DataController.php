@@ -52,11 +52,13 @@ class DataController extends Controller
 
         $media = new Media;
 
-        // Tạo một chuỗi hash từ idProduct và prev_idProductHash
-        $combinedHashCheck = hash('sha256', $data->idProduct . $media->prev_idProductHash . $media->nonce);
 
         // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHashCheck không
         $existingMedia = Media::where('hash_idProduct', $combinedHashCheck)->first();
+
+
+        // Tạo một chuỗi hash từ idProduct và prev_idProductHash
+        $combinedHashCheck = hash('sha256', $data->idProduct . $media->prev_idProductHash . $media->nonce);
 
         if (!$existingMedia) {
             // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct

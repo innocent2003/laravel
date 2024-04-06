@@ -14,31 +14,51 @@ class DataSeeder extends Seeder
      * Run the database seeds.
      */
 
-        public function run()
-    {
-        $faker = Faker::create();
-        for ($i = 0; $i < 10; $i++) {
-            $data = Data::create([
-                "idProduct" => $faker->uuid,
-                "name" => $faker->name,
-                "video" => $faker->url,
-                "image" => $faker->imageUrl(),
-                "description" => $faker->sentence,
-            ]);
+     public function run()
+     {
+         $faker = Faker::create();
+         for ($i = 0; $i < 10; $i++) {
+             $data = Data::create([
+                 "idProduct" => $faker->uuid,
+                 "name" => $faker->name,
+                 "video" => $faker->url,
+                 "image" => $faker->imageUrl(),
+                 "description" => $faker->sentence,
+             ]);
 
-            // Tính toán nonce và tạo dữ liệu cho bảng Media
-            $nonce = 0;
-            $combinedHash = '';
-            do {
-                $nonce++;
-                $combinedHash = hash('sha256', $data->idProduct . $nonce);
-            } while (substr($combinedHash, 0, 4) !== "0000");
+             // Kiểm tra nếu có idProduct trùng nhau
+             $existingMedia = Media::where('hash_idProduct', hash('sha256', $data->idProduct))->first();
 
-            $media = Media::create([
-                "hash_idProduct" => hash('sha256', $data->idProduct . $nonce),
-                "prev_idProductHash" => "",
-                "nonce" => $nonce,
-            ]);
-        }
-    }
+             if ($existingMedia) {
+                 // Tính toán nonce và tạo dữ liệu cho bảng Media với hash kết hợp giữa idProduct, nonce và prev_idProductHash
+                 $nonce = 0;
+                 $combinedHash = '';
+                 do {
+                     $nonce++;
+                     $combinedHash = hash('sha256', $data->idProduct . $nonce . $existingMedia->prev_idProductHash);
+                 } while (substr($combinedHash, 0, 4) !== "0000");
+
+                 $media = Media::create([
+                     "hash_idProduct" => $combinedHash,
+                     "prev_idProductHash" => $existingMedia->hash_idProduct,
+                     "nonce" => $nonce,
+                 ]);
+             } else {
+                 // Tính toán nonce và tạo dữ liệu cho bảng Media
+                 $nonce = 0;
+                 $combinedHash = '';
+                 do {
+                     $nonce++;
+                     $combinedHash = hash('sha256', $data->idProduct . $nonce);
+                 } while (substr($combinedHash, 0, 4) !== "0000");
+
+                 $media = Media::create([
+                     "hash_idProduct" => $combinedHash,
+                     "prev_idProductHash" => "",
+                     "nonce" => $nonce,
+                 ]);
+             }
+         }
+     }
+
 }
