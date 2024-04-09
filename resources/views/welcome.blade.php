@@ -26,8 +26,10 @@
     <source src="{{$data->video}}" >
 </video></td>
 <td>{{$data->description}}</td>
+<td><a href="/comment/{{$data->id}}">Comment</a></td>
 
 </tr>
+
 @endforeach
   </table>
 

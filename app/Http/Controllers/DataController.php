@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Data;
 use Illuminate\Http\Request;
+use App\Models\Media;
 use Hash;
 use DB;
 
@@ -51,6 +52,7 @@ class DataController extends Controller
         } while(substr($combinedHash, 0, 4) !== "0000");
 
         $media = new Media;
+        $combinedHashCheck = hash('sha256', $data->idProduct . $media->prev_idProductHash . $media->nonce);
 
 
         // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHashCheck không
@@ -58,7 +60,7 @@ class DataController extends Controller
 
 
         // Tạo một chuỗi hash từ idProduct và prev_idProductHash
-        $combinedHashCheck = hash('sha256', $data->idProduct . $media->prev_idProductHash . $media->nonce);
+
 
         if (!$existingMedia) {
             // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
@@ -75,6 +77,10 @@ class DataController extends Controller
         $media->save();
 
         return redirect('/');
+    }
+    public function find($id){
+        $data = Data::findOrFail($id);
+        return view("comment",compact("data"));
     }
 
     /**
