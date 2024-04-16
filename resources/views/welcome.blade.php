@@ -21,9 +21,9 @@
 <tr>
 <td>{{$data->id}}</td>
 <td>{{$data->name}}</td>
-<td><img src="{{$data->image}}" alt=""></td>
-<td><video>
-    <source src="{{$data->video}}" >
+<td><img src="{{asset('storage/photos/'.$data->image)}}" alt=""></td>
+<td><video controls>
+    <source src="{{asset('storage/photos/'.$data->video)}}" type="video/mp4">
 </video></td>
 <td>{{$data->description}}</td>
 <td><a href="/comment/{{$data->id}}">Comment</a></td>

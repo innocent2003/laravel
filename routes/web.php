@@ -29,3 +29,5 @@ Route::post("/login",[UserController::class,'loginUser'])->name('login-user');
 Route::post("/register-user",[UserController::class,'registerUser'])->name('register-user');
 Route::get("/comment/{id}",[DataController::class,'find']);
 Route::post("/postComment",[CommentController::class,'create']);
+Route::view("upload","upload");
+Route::post('upload-advanced', [UploadController::class,'upload']);
