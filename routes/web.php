@@ -3,6 +3,7 @@
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/logout', function () {
+    Session::forget('user');
+    return redirect('login');
+});
 Route::get('/',[DataController::class,'index'])->name('upload.form');
 // Route::post('/upload',[DataController::class,'index'])->name('upload.media');
 Route::get('/add1',[DataController::class,'createView']);
@@ -31,3 +36,4 @@ Route::get("/comment/{id}",[DataController::class,'find']);
 Route::post("/postComment",[CommentController::class,'create']);
 Route::view("upload","upload");
 Route::post('upload-advanced', [UploadController::class,'upload']);
+Route::get("/cart/{id}",[CartController::class,'index']);

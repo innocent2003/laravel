@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Data;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -10,9 +11,11 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
         //
+        $data = Data::find($id);
+        return view("cart", compact('data'));
     }
 
     /**
@@ -29,6 +32,13 @@ class CartController extends Controller
     public function store(Request $request)
     {
         //
+        if($request->session()->has('user')){
+            $cart = new Cart;
+            $cart->user_id = $request->session()->get('user')['id'];
+            $cart->data_id = $request->data_id;
+            $cart->save();
+            return redirect('/');
+        }
     }
 
     /**

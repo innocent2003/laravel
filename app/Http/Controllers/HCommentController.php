@@ -10,6 +10,7 @@ class HCommentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $initialHash = "00000000000000000000000000000000000000000";
     public function index()
     {
         //

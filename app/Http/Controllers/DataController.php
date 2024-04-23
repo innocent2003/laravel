@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use Illuminate\Http\Request;
 use App\Models\Media;
+use App\Models\Comment;
 use Hash;
 use DB;
 
@@ -68,12 +69,14 @@ class DataController extends Controller
         $media->nonce = $nonce;
         $media->save();
 
-       
+
         return redirect('/');
     }
     public function find($id){
-        $data = Data::findOrFail($id);
-        return view("comment",compact("data"));
+        $data = Data::with('comments')->findOrFail($id);
+        $product = Data::findOrFail($id);
+        $comments = $product->comments;
+        return view("comment",compact("product", "comments"));
     }
 
     /**

@@ -7,6 +7,12 @@
 </head>
 <body>
   <button><a href="/add1">Them du lieu</a></button>
+  @if(Session::has('user'))
+  <button><a href="/logout">Dang xuat</a></button>
+  @else
+  <button><a href="/login">Dang nhap</a></button>
+
+  @endif
   <table>
     <tr>
     <th>id</th>
@@ -26,7 +32,11 @@
     <source src="{{asset('storage/photos/'.$data->video)}}" type="video/mp4">
 </video></td>
 <td>{{$data->description}}</td>
-<td><a href="/comment/{{$data->id}}">Comment</a></td>
+
+<td>@if(Session::has('user'))
+    <a href="/comment/{{$data->id}}">Comment</a>|| <a href="/cart/{{$data->id}}">Mua hàng</a>
+@endif
+</td>
 
 </tr>
 
