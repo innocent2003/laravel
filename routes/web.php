@@ -37,3 +37,4 @@ Route::post("/postComment",[CommentController::class,'create']);
 Route::view("upload","upload");
 Route::post('upload-advanced', [UploadController::class,'upload']);
 Route::get("/cart/{id}",[CartController::class,'index']);
+Route::post("/order",[CartController::class,'store']);

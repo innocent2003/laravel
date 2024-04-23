@@ -8,5 +8,10 @@
 <body>
 {{$data->name}}
 <img src="{{$data->image}}" alt="">
+<form action="/order" method="post">
+    @csrf
+    <input type="hidden" name="data_id" value="{{$data->id}}">
+    <button type="submit">Dat Hang</button>
+</form>
 </body>
 </html>
