@@ -3,28 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Media</title>
+    <title>Document</title>
 </head>
 <body>
-<?php
-use App\Http\Controllers\CartController;
-$total=0;
-if(Session::has('user'))
-{
-  $total= CartController::cartItem();
-}
-
-?>
-  <button><a href="/add1">Them du lieu</a></button>
-  @if(Session::has('user'))
-  <button><a href="/logout">Dang xuat</a></button>
-<Button><a href="/cartList">So luong mua hang la {{$total}}</a></Button>
-  @else
-  <button><a href="/login">Dang nhap</a></button>
-
-  @endif
-
-  <table>
+<table>
     <tr>
     <th>id</th>
     <th>name</th>
@@ -45,7 +27,7 @@ if(Session::has('user'))
 <td>{{$data->description}}</td>
 
 <td>@if(Session::has('user'))
-    <a href="/comment/{{$data->id}}">Comment</a>|| <a href="/cart/{{$data->id}}">Mua hàng</a>
+    <a href="/comment/{{$data->id}}">Comment</a>|| 
 @endif
 </td>
 
@@ -53,6 +35,5 @@ if(Session::has('user'))
 
 @endforeach
   </table>
-
 </body>
 </html>
