@@ -14,6 +14,7 @@ class DataSeeder extends Seeder
      * Run the database seeds.
      */
 
+     private $lastHash = "0000000000000000000000000000000000000000000000000000000000000";
      public function run()
      {
          $faker = Faker::create();
@@ -54,9 +55,10 @@ class DataSeeder extends Seeder
 
                  $media = Media::create([
                      "hash_idProduct" => $combinedHash,
-                     "prev_idProductHash" => "",
+                     "prev_idProductHash" => $this->lastHash,
                      "nonce" => $nonce,
                  ]);
+                 $this->lastHash = $combinedHash;
              }
          }
      }

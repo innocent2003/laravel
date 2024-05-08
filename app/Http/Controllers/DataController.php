@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use Illuminate\Http\Request;
 use App\Models\Media;
+use App\Models\Comment;
 use Hash;
 use DB;
 
@@ -13,6 +14,7 @@ class DataController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private $initialHash = "00000000000000000000000000000000000000000";
     public function index()
     {
         //
@@ -29,13 +31,16 @@ class DataController extends Controller
 
     public function create(Request $request)
     {
-        // Lưu tệp ảnh và video vào thư mục 'public/photos'
-        $image = $request->file('image')->getClientOriginalName();
-        $request->file('image')->storeAs('public/photos', $image);
-        $video = $request->file('video')->getClientOriginalName();
-        $request->file('video')->storeAs('public/photos', $video);
 
-        // Tạo một bản ghi mới trong bảng Data
+
+        $imagePath = $request->file('image')->store('public/photos');
+        $videoPath = $request->file('video')->store('public/photos');
+
+
+        $image = basename($imagePath);
+        $video = basename($videoPath);
+
+
         $data = new Data;
         $data->name = $request->name;
         $data->video = $video;
@@ -43,44 +48,35 @@ class DataController extends Controller
         $data->description = $request->description;
         $data->save();
 
-        // Tính toán nonce bằng cách thử các giá trị để tạo ra một hash đầu tiên hợp lệ
+
         $nonce = 0;
-        $combinedHash = '';
+        $hashProduct = '';
+
+
         do {
             $nonce++;
-            $combinedHash = hash('sha256', $data->idProduct . $nonce);
-        } while(substr($combinedHash, 0, 4) !== "0000");
+            $hashProduct = hash('sha256', $data->id . $nonce);
+        } while (substr($hashProduct, 0, 4) !== "0000");
+
+
+        $latestMedia = Media::latest()->first();
+        $prevHash = $latestMedia ? $latestMedia->hash_idProduct : $this->initialHash;
+
 
         $media = new Media;
-        $combinedHashCheck = hash('sha256', $data->idProduct . $media->prev_idProductHash . $media->nonce);
-
-
-        // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHashCheck không
-        $existingMedia = Media::where('hash_idProduct', $combinedHashCheck)->first();
-
-
-        // Tạo một chuỗi hash từ idProduct và prev_idProductHash
-
-
-        if (!$existingMedia) {
-            // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
-            $media->hash_idProduct = hash('sha256', $data->idProduct . $nonce);
-            $media->prev_idProductHash = "";
-        } else {
-            // Nếu có bản ghi trong media, kiểm tra xem hash-idProduct có khớp với combinedHash không
-            // Nếu khớp, thêm idProduct mới vào hash-idProduct cũ và cập nhật hash-idProduct
-            $media->hash_idProduct = hash('sha256', $data->idProduct . $existingMedia->hash_idProduct . $none);
-            $media->prev_idProductHash = $existingMedia->hash_idProduct;
-        }
-
-        $media->nonce = $nonce; // Lưu nonce vào bản ghi media
+        $media->hash_idProduct = $hashProduct;
+        $media->prev_idProductHash = $prevHash;
+        $media->nonce = $nonce;
         $media->save();
+
 
         return redirect('/');
     }
     public function find($id){
-        $data = Data::findOrFail($id);
-        return view("comment",compact("data"));
+        $data = Data::with('comments')->findOrFail($id);
+        $product = Data::findOrFail($id);
+        $comments = $product->comments;
+        return view("comment",compact("product", "comments"));
     }
 
     /**

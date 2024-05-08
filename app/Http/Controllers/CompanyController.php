@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HComment;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
-class HCommentController extends Controller
+class CompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    private $initialHash = "00000000000000000000000000000000000000000";
     public function index()
     {
         //
@@ -35,7 +34,7 @@ class HCommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(HComment $hComment)
+    public function show(Company $company)
     {
         //
     }
@@ -43,7 +42,7 @@ class HCommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HComment $hComment)
+    public function edit(Company $company)
     {
         //
     }
@@ -51,7 +50,7 @@ class HCommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HComment $hComment)
+    public function update(Request $request, Company $company)
     {
         //
     }
@@ -59,7 +58,7 @@ class HCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HComment $hComment)
+    public function destroy(Company $company)
     {
         //
     }

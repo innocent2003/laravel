@@ -6,12 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-{{$data->id}} <br>
-{{$data->name}}
+{{$product->name}} <br>
+<img src="{{$product->image}}" alt="">
+@foreach($comments as $comment)
+<div>
+{{$comment->comment}}
+</div>
+@endforeach
 <form action="/postComment" method="post">
     @csrf
    Comment <input type="text" name="comment" id="">
-   <input type="hidden" name="data_id" value="{{$data->id}}">
+   <input type="hidden" name="data_id" value="{{$product->id}}">
    <button type="submit">Submit</button>
 </form>
 </body>
