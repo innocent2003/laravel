@@ -21,10 +21,12 @@ class DataSeeder extends Seeder
          for ($i = 0; $i < 10; $i++) {
              $data = Data::create([
                  "idProduct" => $faker->uuid,
-                 "name" => $faker->name,
+                 "user_id"=>$faker->randomNumber(1,10),
+                 "dataname" => $faker->name,
                  "video" => $faker->url,
                  "image" => $faker->imageUrl(),
                  "description" => $faker->sentence,
+                //  'is_active' => $this->faker->randomElement(['active', 'inactive'])
              ]);
 
              // Kiểm tra nếu có idProduct trùng nhau

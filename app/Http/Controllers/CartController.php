@@ -40,6 +40,8 @@ class CartController extends Controller
             $cart = new Cart;
             $cart->user_id = $request->session()->get('user')['id'];
             $cart->data_id = $request->data_id;
+            $cart->purchase = $request->purchase;
+            $cart->address = $request->address;
             $cart->save();
 
             $hashCart = '';

@@ -8,10 +8,10 @@
 <body>
 <form action="{{route('addMedia')}}" method="post"enctype='multipart/form-data'>
     @csrf
-    <input type="text" name="name"/>
-    <input type="file" name="image">
-    <input type="file" name="video" id="">
-    <input type="text" name="description">
+    Tên sản phẩm <input type="text" name="dataname"/><br>
+    Ảnh sản phẩm <input type="file" name="image"><br>
+    Video chăm sóc <input type="file" name="video" id=""><br>
+    Mô tả chi tiết <input type="text" name="description"><br>
     <button type="submit">Save</button>
 </form>
 <a href="/">Thoat</a>

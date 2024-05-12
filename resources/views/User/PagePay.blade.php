@@ -51,41 +51,54 @@
                 </div>
             </nav>
         </header>
-        <main class="m-5">
-            <div class="d-flex gap-5 flex-wrap">
-                <div class="card" style="width: 18rem;">
-                    <img src="./images/anh-trai-cay-troll-ca-chua-nhan-kiwi.jpg" class="card-img-top" alt="ảnh">
-                    <div class="card-body">
-                        <h5 class="card-title">Táo sạch</h5>
-                        <p class="card-text">Đây là sản phẩm ....</p>
-                        <a href="#" class="btn btn-primary">Thông tin chi tiết</a>
+        <main class="m-5 fs-4">
+            <form action="/order" method="post" class="d-grid gap-3">
+            @csrf
+            <input type="hidden" name="data_id" value="{{$data->id}}">
+                <div class="border rounded px-4 py-3">
+                    <div class="">Phương thức thanh toán</div>
+                    <div class="mt-2 ms-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="radio" id="directPayment" name="purchase">
+                            <label for="directPayment">Thanh toán trực tiếp</label>
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="radio" id="onlinePayment" name="paymentMethod">
+                            <label for="onlinePayment">Thanh toán online</label>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-            <div class="my-5 d-flex justify-content-center">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                <div class="border rounded px-4 py-3">
+                    <div class="">Nhập địa chỉ</div>
+                    <input type="text" name="address" class="w-100 py-1 rounded px-2 ms-3" placeholder="Nhập địa chỉ của bạn">
+                </div>
+                <div class="mt-5">
+                    <button type="submit" class="w-100 py-2 border rounded">Mua</button>
+                </div>
+            </form>
         </main>
     </div>
     <script src="{{ asset('js/vendor.min.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script>
+        function selectPaymentMethod() {
+            let paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+
+            paymentRadios.forEach(function(radio) {
+                if (radio.checked) {
+                    paymentRadios.forEach(function(otherRadio) {
+                        if (otherRadio !== radio) {
+                            otherRadio.checked = false;
+                        }
+                    });
+                }
+            });
+        }
+
+        let paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+        paymentRadios.forEach(function(radio) {
+            radio.addEventListener('change', selectPaymentMethod);
+        });
+    </script>
 </body>
 
 </html>

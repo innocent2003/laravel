@@ -21,15 +21,15 @@ class UserController extends Controller
     }
     public function registerUser(Request $request){
         $request->validate([
-            'name'=>'required',
+            'username'=>'required',
             'email'=>'required|email|unique:users',
             'password'=>'required|min:5|max:12',
 
         ]);
-    
+
 
         $user = new User();
-        $user->name = $request->name;
+        $user->name = $request->username;
 
         $user->email = $request->email;
         $user->password = Hash::make($request->password);

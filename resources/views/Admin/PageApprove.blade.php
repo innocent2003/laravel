@@ -58,19 +58,21 @@
                                 <tr>
                                     <th scope="col">STT</th>
                                     <th scope="col">Tên bài đăng</th>
-                                    <th scope="col">Nông trại đăng</th>
+                                    <th scope="col">Người đăng</th>
                                     <th scope="col">Tình trạng</th>
                                 </tr>
                             </thead>
                             <tbody>
+                            @foreach ($data as $index => $item)
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td><a href="" class="text-black  ">
-                                            <ins> Bài đăng A</ins>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td><a href="/Approve/{{$item->id}}" class="text-black">
+                                            <ins>{{ $item->dataname }}</ins>
                                         </a></td>
-                                    <td>Nông trại A</td>
-                                    <td>Đã phê duyệt</td>
+                                    <td>{{ $item->username }}</td>
+                                    <td>{{ $item->is_active }}</td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

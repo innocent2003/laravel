@@ -24,7 +24,7 @@ Route::get('/logout', function () {
     Session::forget('user');
     return redirect('login');
 });
-Route::get('/',[DataController::class,'index'])->name('upload.form');
+Route::get('/ListInfoProduct',[DataController::class,'index'])->name('upload.form');
 // Route::post('/upload',[DataController::class,'index'])->name('upload.media');
 Route::get('/add1',[DataController::class,'createView']);
 Route::post('/add',[DataController::class,'create'])->name('addMedia');
@@ -39,3 +39,19 @@ Route::post('upload-advanced', [UploadController::class,'upload']);
 Route::get("/cart/{id}",[CartController::class,'index']);
 Route::post("/order",[CartController::class,'store']);
 Route::get('/cartList',[CartController::class,'show']);
+
+Route::view("AddData","AddData");
+// Route::view("Approve","Admin.Approve");
+Route::view("Comments","User.Comments");
+// Route::view("ListInfoProduct","User.ListInfoProduct");
+// Route::view("PageApprove","Admin.PageApprove");
+// Route::view("PagePay","User.PagePay");
+Route::view("Approve1","Approve");
+Route::get('/PageApprove',[DataController::class,'Approve']);
+Route::get('/Approve/{id}',[DataController::class,'Show']);
+Route::put('/Approve/{id}/update-is-active', [DataController::class, 'update'])->name('data.updateIsActive');
+Route::get('/', [DataController::class, 'ListProductInfo']);
+Route::get("/PagePay/{id}",[DataController::class,'comment']);
+
+
+

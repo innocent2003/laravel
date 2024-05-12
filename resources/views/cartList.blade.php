@@ -19,7 +19,7 @@
   @foreach($data as $data)
 <tr>
 <td>{{$data->id}}</td>
-<td>{{$data->name}}</td>
+<td>{{$data->dataname}}</td>
 <td><img src="{{asset('storage/photos/'.$data->image)}}" alt=""></td>
 <td><video controls>
     <source src="{{asset('storage/photos/'.$data->video)}}" type="video/mp4">
@@ -27,7 +27,7 @@
 <td>{{$data->description}}</td>
 
 <td>@if(Session::has('user'))
-    <a href="/comment/{{$data->id}}">Comment</a>|| 
+    <a href="/comment/{{$data->id}}">Comment</a>||
 @endif
 </td>
 

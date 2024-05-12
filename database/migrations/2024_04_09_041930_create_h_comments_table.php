@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('h_comments', function (Blueprint $table) {
             $table->id();
-            $table->string("hash_idProduct");
-            $table->string("prev_idProductHash")->default("");
+            $table->string("hash_idComment");
+            $table->string("prev_idCommentHash")->default("");
             $table->unsignedBigInteger("nonce");
             $table->timestamps();
         });

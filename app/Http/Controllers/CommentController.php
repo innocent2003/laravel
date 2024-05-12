@@ -34,33 +34,40 @@ class CommentController extends Controller
         $combinedHash = '';
         do {
             $nonce++;
-            $combinedHash = hash('sha256', $comment->idComment . $nonce);
-        } while(substr($combinedHash, 0, 4) !== "0000");
+            $hashComment = hash('sha256', $comment->idComment . $nonce);
+        } while(substr($hashComment, 0, 4) !== "0000");
 
-        $hComment = new HComment;
-        $combinedHashCheck = hash('sha256', $comment->idComment . $hComment->prev_idProductHash . $hComment->nonce);
+        // $hComment = new HComment;
+        // $combinedHashCheck = hash('sha256', $comment->idComment . $hComment->prev_idProductHash . $hComment->nonce);
 
 
         // Kiểm tra xem hash-idProduct trong bảng media có trùng với combinedHashCheck không
-        $existingMedia = HComment::where('hash_idProduct', $combinedHashCheck)->first();
+        // $existingMedia = HComment::where('hash_idProduct', $combinedHashCheck)->first();
+        $latestComment = HComment::latest()->first();
+        $prevHash = $latestComment ? $latestComment->hash_idComment : $this->initialHash;
 
+        $hComment = new HComment;
+        $hComment->hash_idComment = $hashComment;
+        $hComment->prev_idCommentHash = $prevHash;
+        $hComment->nonce = $nonce;
+        $hComment->save();
 
         // Tạo một chuỗi hash từ idProduct và prev_idProductHash
 
 
-        if (!$existingMedia) {
-            // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
-            $hComment->hash_idProduct = hash('sha256', $comment->idComment . $nonce);
-            $hComment->prev_idProductHash = "";
-        } else {
-            // Nếu có bản ghi trong media, kiểm tra xem hash-idProduct có khớp với combinedHash không
-            // Nếu khớp, thêm idProduct mới vào hash-idProduct cũ và cập nhật hash-idProduct
-            $hComment->hash_idProduct = hash('sha256', $comment->idComment . $existingMedia->hash_idProduct . $none);
-            $hComment->prev_idProductHash = $existingMedia->hash_idProduct;
-        }
+        // if (!$existingMedia) {
+        //     // Nếu không có bản ghi trong media, tạo mới và hash-idProduct sẽ là idProduct
+        //     $hComment->hash_idProduct = hash('sha256', $comment->idComment . $nonce);
+        //     $hComment->prev_idProductHash = "";
+        // } else {
+        //     // Nếu có bản ghi trong media, kiểm tra xem hash-idProduct có khớp với combinedHash không
+        //     // Nếu khớp, thêm idProduct mới vào hash-idProduct cũ và cập nhật hash-idProduct
+        //     $hComment->hash_idProduct = hash('sha256', $comment->idComment . $existingMedia->hash_idProduct . $none);
+        //     $hComment->prev_idProductHash = $existingMedia->hash_idProduct;
+        // }
 
-        $hComment->nonce = $nonce; // Lưu nonce vào bản ghi media
-        $hComment->save();
+        // $hComment->nonce = $nonce; // Lưu nonce vào bản ghi media
+        // $hComment->save();
 
         return redirect("/");
 
